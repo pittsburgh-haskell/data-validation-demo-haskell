@@ -10,7 +10,7 @@ import qualified Date
 import Data.Validation
 
 -- For GHC < 7.10
-import Control.Applicative ((<$>), (<*>))
+import Control.Applicative (pure, (<$>), (<*>))
 
 data BookingRequest =
   BookingRequest { getDate :: Date.Date
