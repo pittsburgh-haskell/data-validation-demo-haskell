@@ -20,7 +20,7 @@ library
   exposed-modules:     BookingRequest
   -- other-modules:       
   -- other-extensions:    
-  build-depends:       base
+  build-depends:       base >= 3 && < 5
                        ,validation
 
 test-suite spec
@@ -30,7 +30,7 @@ test-suite spec
                        ,test
   ghc-options:         -Wall
   main-is:             Spec.hs
-  build-depends:       base
+  build-depends:       base >= 3 && <5
                        ,validation
                        ,hspec
 

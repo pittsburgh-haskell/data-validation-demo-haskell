@@ -9,6 +9,9 @@ import qualified Seats
 import qualified Date
 import Data.Validation
 
+-- For GHC < 7.10
+import Control.Applicative ((<$>), (<*>))
+
 data BookingRequest =
   BookingRequest { getDate :: Date.Date
                  , getSeats :: Seats.Seats
