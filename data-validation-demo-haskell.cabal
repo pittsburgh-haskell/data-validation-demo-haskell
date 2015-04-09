@@ -1,0 +1,39 @@
+name:                data-validation-demo
+version:             0.1.0.0
+synopsis:            Demo of data validation
+description:         Demo of applicative data validation
+homepage:            https://github.com/FranklinChen/data-validation-demo-haskell
+license:             BSD3
+license-file:        LICENSE
+author:              Franklin Chen
+maintainer:          franklinchen@franklinchen.com
+copyright:           Franklin Chen
+category:            Text
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  default-language:    Haskell2010
+  hs-source-dirs:      src
+  ghc-options:         -Wall
+  exposed-modules:     BookingRequest
+  -- other-modules:       
+  -- other-extensions:    
+  build-depends:       base
+                       ,validation
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  default-language:    Haskell2010
+  hs-source-dirs:      src
+                       ,test
+  ghc-options:         -Wall
+  main-is:             Spec.hs
+  build-depends:       base
+                       ,validation
+                       ,hspec
+
+source-repository head
+  type:                 git
+  location:             https://github.com/FranklinChen/data-validation-demo-haskell
