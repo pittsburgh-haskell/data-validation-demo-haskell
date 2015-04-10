@@ -20,5 +20,5 @@ instance Show Error where
 -- | Smart constructor for 'Seats' that
 -- ensures always positive.
 make :: Int -> Validation Error Seats
-make seats | seats < 0 = Failure $ BadCount seats
+make seats | seats <= 0 = Failure $ BadCount seats
            | otherwise = Success $ Seats seats

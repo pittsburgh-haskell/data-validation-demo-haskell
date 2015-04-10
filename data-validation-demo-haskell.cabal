@@ -35,6 +35,7 @@ test-suite spec
   ghc-options:         -Wall
   main-is:             Spec.hs
   other-modules:       BookingRequestSpec
+                     , SeatsSpec
                      , OptionWinnerSpec
                      , ResultWinnerSpec
   build-depends:       base >= 3 && <5
