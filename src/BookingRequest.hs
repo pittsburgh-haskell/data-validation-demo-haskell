@@ -26,8 +26,8 @@ data Error =
     DateError Date.Error
   | SeatsError Seats.Error
   | Missing String       -- ^ label
-  | DateBefore Date.Date -- ^ date that was attempted
-               Date.Date -- ^ the current date at attempt
+  | DateBefore Date.Date
+               Date.Date -- ^ date attempted, current date at attempt
                deriving (Eq)
 
 instance Show Error where

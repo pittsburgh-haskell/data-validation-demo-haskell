@@ -1,6 +1,8 @@
 module Date ( Date(..)
-            , Error(..)  -- ^ our errors
-            , parse      -- ^ smart constructor
+            -- * Our errors
+            , Error(..)
+            -- * Smart constructor
+            , parse
             , isBefore
             ) where
 
