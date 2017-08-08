@@ -1,7 +1,10 @@
-module Seats ( Seats     -- ^ don't export constructor
-             , getNum    -- ^ accessor
-             , Error(..) -- ^ our errors
-             , make      -- ^ smart constructor
+module Seats ( Seats
+             -- * Accessor
+             , getNum
+             -- * Our errors
+             , Error(..)
+             -- * Smart constructor
+             , make
              ) where
 
 -- | Wrapper around 'Int' that ensures always positive.
