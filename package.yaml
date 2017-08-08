@@ -1,0 +1,26 @@
+name: data-validation-demo
+version: '0.1.0.0'
+synopsis: Demo of data validation
+description: Demo of applicative data validation
+category: Text
+author: Franklin Chen
+maintainer: franklinchen@franklinchen.com
+copyright: Franklin Chen
+license: BSD3
+github: FranklinChen/data-validation-demo-haskell
+extra-source-files:
+- README.md
+ghc-options: -Wall
+dependencies:
+- base >=3 && <5
+- either
+library:
+  source-dirs: src
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+    - test
+    dependencies:
+    - data-validation-demo
+    - hspec

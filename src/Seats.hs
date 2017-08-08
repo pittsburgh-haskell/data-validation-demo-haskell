@@ -4,8 +4,6 @@ module Seats ( Seats     -- ^ don't export constructor
              , make      -- ^ smart constructor
              ) where
 
-import Data.Validation
-
 -- | Wrapper around 'Int' that ensures always positive.
 newtype Seats = Seats { getNum :: Int }
   deriving (Show, Eq)
@@ -19,6 +17,6 @@ instance Show Error where
 
 -- | Smart constructor for 'Seats' that
 -- ensures always positive.
-make :: Int -> Validation Error Seats
-make seats | seats <= 0 = Failure $ BadCount seats
-           | otherwise = Success $ Seats seats
+make :: Int -> Either Error Seats
+make seats | seats <= 0 = Left $ BadCount seats
+           | otherwise = Right $ Seats seats

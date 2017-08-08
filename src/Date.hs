@@ -5,7 +5,6 @@ module Date ( Date(..)
             ) where
 
 import Text.Read (readMaybe)
-import Data.Validation
 
 -- | Dummy 'Date' type for illustration only.
 newtype Date = Date { getSeconds :: Int }
@@ -21,10 +20,10 @@ instance Show Error where
   show (BadParse s) = "failed to parse date string " ++ s
 
 -- | Try to parse @s@ into a valid Date, using 'readMaybe'.
-parse :: String -> Validation Error Date
+parse :: String -> Either Error Date
 parse s = case readMaybe s of
-            Nothing -> Failure $ BadParse s
-            Just seconds -> Success $ Date seconds
+            Nothing -> Left $ BadParse s
+            Just seconds -> Right $ Date seconds
 
 -- | Return where @date1@ is before @date2@.
 isBefore :: Date -> Date -> Bool

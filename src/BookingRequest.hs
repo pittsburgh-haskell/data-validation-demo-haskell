@@ -5,12 +5,12 @@ module BookingRequest ( BookingRequest
                       , Error(..)
                       ) where
 
+import Control.Arrow ((>>>))
+import Data.Either.Validation
+import Data.Either.Combinators (mapLeft)
+
 import qualified Seats
 import qualified Date
-import Data.Validation
-
--- For GHC < 7.10
-import Control.Applicative (pure, (<$>), (<*>))
 
 data BookingRequest =
   BookingRequest { getDate :: Date.Date
@@ -41,44 +41,37 @@ instance Show Error where
 make :: Date.Date    -- ^ time when attempting request
      -> Maybe String -- ^ optional date string for event
      -> Maybe Int    -- ^ optional number of seats
-     -> AccValidation [Error] BookingRequest
+     -> Validation [Error] BookingRequest
 make now optDateString optSeats = BookingRequest
-  <$> vToAccVList (makeTimelyBookingDate now optDateString)
-  <*> vToAccVList (makeSeats optSeats)
+  <$> eitherToValidationL (makeTimelyBookingDate now optDateString)
+  <*> eitherToValidationL (makeSeats optSeats)
 
 makeTimelyBookingDate :: Date.Date
                       -> Maybe String
-                      -> Validation Error Date.Date
+                      -> Either Error Date.Date
 makeTimelyBookingDate now optDateString = do
-  dateString <- optDateString `maybeToV` Missing "date"
-  date <- mapFailure DateError $ Date.parse dateString
+  dateString <- optDateString `maybeToEither` Missing "date"
+  date <- mapLeft DateError $ Date.parse dateString
   timelyBookingDate date now
 
 timelyBookingDate :: Date.Date -- ^ attempted booking
                   -> Date.Date -- ^ now
-                  -> Validation Error Date.Date
+                  -> Either Error Date.Date
 timelyBookingDate date now
-  | not $ Date.isBefore date now = Success date
-  | otherwise = Failure $ DateBefore date now
+  | not $ Date.isBefore date now = Right date
+  | otherwise = Left $ DateBefore date now
 
-makeSeats :: Maybe Int -> Validation Error Seats.Seats
-makeSeats optSeats = do
-  num <- optSeats `maybeToV` Missing "seats"
-  mapFailure SeatsError $ Seats.make num
+makeSeats :: Maybe Int -> Either Error Seats.Seats
+makeSeats = maybe (Left $ Missing "seats")
+            (Seats.make >>> mapLeft SeatsError)
 
--- | Utility to convert 'Maybe' to 'Validation' with a
+-- | Utility to convert 'Maybe' to 'Either' with a
 -- custom error.
-maybeToV :: Maybe a -> e -> Validation e a
-maybeToV Nothing e  = Failure e
-maybeToV (Just a) _ = Success a
+maybeToEither :: Maybe a -> e -> Either e a
+maybeToEither Nothing e  = Left e
+maybeToEither (Just a) _ = Right a
 
-mapFailure :: (e -> e') -> Validation e a -> Validation e' a
-mapFailure f (Failure e) = Failure $ f e
-mapFailure _ (Success a) = Success a
-
-vToAccV :: Validation e a -> AccValidation e a
-vToAccV (Failure e) = AccFailure e
-vToAccV (Success a) = AccSuccess a
-
-vToAccVList :: Validation e a -> AccValidation [e] a
-vToAccVList = vToAccV . mapFailure pure
+-- | Utility.
+eitherToValidationL :: Either e a -> Validation [e] a
+eitherToValidationL =
+  mapLeft pure >>> eitherToValidation

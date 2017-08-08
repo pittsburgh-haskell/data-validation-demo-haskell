@@ -1,18 +1,6 @@
-{-# LANGUAGE CPP #-}
-
 module ResultWinner where
 
-#if MIN_VERSION_base(4,8,0)
 import Data.Function ((&))
-#else
-infixl 1 &
-
--- | '&' is a reverse application operator.  This provides notational
--- convenience.  Its precedence is one higher than that of the forward
--- application operator '$', which allows '&' to be nested in '$'.
-(&) :: a -> (a -> b) -> b
-x & f = f x
-#endif
 
 newtype Person = Person { getName :: String }
                  deriving (Show, Eq)
